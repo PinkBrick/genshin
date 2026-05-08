@@ -207,6 +207,8 @@ return
 ;----------------------------------------
 ; X1키가 눌리면 f반복
 ~XButton1::
+	Click
+	
 	StartM1Timer()
 	StartQETimer()
 return
