@@ -1,35 +1,39 @@
-;@Ahk2Exe-SetMainIcon temp_260416_222240_2.ico
-;language: EUC-KR
-#Persistent ;º¯¼ö¸¦ È°¼ºÈ­ÇÏ¿© ½ºÅ©¸³Æ®°¡ °è¼Ó ½ÇÇàµÇµµ·Ï ¼³Á¤
-#InstallKeybdHook  ; Å°º¸µå ÈÅÀ» ¼³Ä¡ÇÏ¿© Å° ÀÔ·Â °¨Áö
-#UseHook            ; Å°º¸µå ÈÅÀ» »ç¿ëÇÏ¿© Å° ÀÔ·Â °¨Áö
+ï»¿;@Ahk2Exe-SetMainIcon temp_260416_222240_2.ico
+; File encoding: UTF-8
+#Persistent ;ë³€ìˆ˜ë¥¼ í™œì„±í™”í•˜ì—¬ ìŠ¤í¬ë¦½íŠ¸ê°€ ê³„ì† ì‹¤í–‰ë˜ë„ë¡ ì„¤ì •
+#InstallKeybdHook  ; í‚¤ë³´ë“œ í›…ì„ ì„¤ì¹˜í•˜ì—¬ í‚¤ ì…ë ¥ ê°ì§€
+#UseHook            ; í‚¤ë³´ë“œ í›…ì„ ì‚¬ìš©í•˜ì—¬ í‚¤ ì…ë ¥ ê°ì§€
+#InstallMouseHook
 
 
-global fToggle := false ; TrueÀÌ¸é fÅ°°¡ ¹İº¹µÈ´Ù.
-global fTimer := 300  ; 0.3ÃÊ °£°İ
-global fCallCnt := 0 ; fÈ£Ãâ Ä«¿îÆ®. 3È¸ÀÌ»óÀÌ¸é À¯Áö·Î ÇÑ´Ù.
+global fToggle := false ; Trueì´ë©´ fí‚¤ê°€ ë°˜ë³µëœë‹¤.
+global fTimer := 300  ; 0.3ì´ˆ ê°„ê²©
+global fCallCnt := 0 ; fí˜¸ì¶œ ì¹´ìš´íŠ¸. 3íšŒì´ìƒì´ë©´ ìœ ì§€ë¡œ í•œë‹¤.
 
-global qeToggle := false  ; TrueÀÌ¸é qeÅ°°¡ ¹İº¹µÈ´Ù.
-global qeTimer := 300  ; 0.3ÃÊ °£°İ
-global qeCallCnt := 0 ; e¸¦ ´©¸¦Áö q¸¦ ´©¸¦Áö ±¸ºĞ. ±³´ë·Î ÇÑ¹ø¾¿ ´­¸°´Ù.
+global qeToggle := false  ; Trueì´ë©´ qeí‚¤ê°€ ë°˜ë³µëœë‹¤.
+global qeTimer := 300  ; 0.3ì´ˆ ê°„ê²©
+global qeCallCnt := 0 ; eë¥¼ ëˆ„ë¥¼ì§€ që¥¼ ëˆ„ë¥¼ì§€ êµ¬ë¶„. êµëŒ€ë¡œ í•œë²ˆì”© ëˆŒë¦°ë‹¤.
 
-global m1Toggle := false  ; TrueÀÌ¸é ¸¶¿ìšÃ¿ŞÂÊ¹öÆ°ÀÌ ¹İº¹µÈ´Ù.
-global m1Timer := 300  ; 0.3ÃÊ °£°İ
+global m1Toggle := false  ; Trueì´ë©´ ë§ˆìš°ì‹€ì™¼ìª½ë²„íŠ¼ì´ ë°˜ë³µëœë‹¤.
+global m1Timer := 300  ; 0.3ì´ˆ ê°„ê²©
+global x1Held := false
+global x2Held := false
+global mouseWatchInterval := 75 ; physical button poll interval (ms)
 
-global ttimer := 1000 ; 1ÃÊ °£°İÀ¸·Î ¿ø½Å ½ÇÇàÁßÀÎÁö È®ÀÎ
-global tSecLimit := 60 ; 60ÃÊ µ¿¾È ¿ø½ÅÀÌ ¾Æ´Ò °æ¿ì¿¡ Á¾·áÇÑ´Ù.
-global tSecCnt := 0 ; Á¾·á±îÁö Ä«¿îÆ®
+global ttimer := 1000 ; 1ì´ˆ ê°„ê²©ìœ¼ë¡œ ì›ì‹  ì‹¤í–‰ì¤‘ì¸ì§€ í™•ì¸
+global tSecLimit := 60 ; 60ì´ˆ ë™ì•ˆ ì›ì‹ ì´ ì•„ë‹ ê²½ìš°ì— ì¢…ë£Œí•œë‹¤.
+global tSecCnt := 0 ; ì¢…ë£Œê¹Œì§€ ì¹´ìš´íŠ¸
 
-;SetTimer, RepeatT, 1000 ; ¿ø½Å ½ÇÇà Ã¼Å©´Â 1ÃÊ¸¶´Ù
+;SetTimer, RepeatT, 1000 ; ì›ì‹  ì‹¤í–‰ ì²´í¬ëŠ” 1ì´ˆë§ˆë‹¤
 
 ;----------------------------------------
-; ¿ø½Å ½ÇÇàÁßÀÎÁö Ã¼Å© Ä«¿îÆ®
+; ì›ì‹  ì‹¤í–‰ì¤‘ì¸ì§€ ì²´í¬ ì¹´ìš´íŠ¸
 RepeatT:
 	WinGet, hWnd, ID, A
 	WinGet, ProcessName, ProcessName, ahk_id %hWnd%
 	if (ProcessName != "GenshinImpact.exe")
 	{
-		; ¿ø½ÅÀÌ µ¿ÀÛÁßÀÌ ¾Æ´Ï¸é Ä«¿îÆ®¸¦ ¼¼¼­, Á¾·áÇÑ´Ù.
+		; ì›ì‹ ì´ ë™ì‘ì¤‘ì´ ì•„ë‹ˆë©´ ì¹´ìš´íŠ¸ë¥¼ ì„¸ì„œ, ì¢…ë£Œí•œë‹¤.
 		tSecCnt := tSecCnt +1
 		if(tSecCnt >= tSecLimit ) 
 		{
@@ -40,13 +44,13 @@ RepeatT:
 	}
     else
 	{
-		; ¿ø½Å½Ã µ¿ÀÛÁßÀÌ¸é Å¸ÀÌ¸Ó ÃÊ±âÈ­
+		; ì›ì‹ ì‹œ ë™ì‘ì¤‘ì´ë©´ íƒ€ì´ë¨¸ ì´ˆê¸°í™”
 		tSecCnt := 0
 	}
 return
 
 ;-------------------------------------------
-; timer ¼ÂÆÃ ÇÔ¼öµé
+; timer ì…‹íŒ… í•¨ìˆ˜ë“¤
 
 StartFTimer()
 {
@@ -94,17 +98,45 @@ CancelM1Timer()
 	return
 }
 
+; Poll physical button state in case an XButton Up event is missed.
+WatchMouseButtons:
+    if (x1Held && !GetKeyState("XButton1", "P"))
+        ReleaseXButton1()
+    if (x2Held && !GetKeyState("XButton2", "P"))
+        ReleaseXButton2()
+return
+
+ReleaseXButton1()
+{
+    x1Held := false
+    CancelQETimer()
+    if (!x2Held)
+        CancelM1Timer()
+    if (!x1Held && !x2Held)
+        SetTimer, WatchMouseButtons, Off
+}
+
+ReleaseXButton2()
+{
+    x2Held := false
+    if (!x1Held)
+        CancelM1Timer()
+    if (!x1Held && !x2Held)
+        SetTimer, WatchMouseButtons, Off
+}
 ;----------------------------------------
-; FÅ°°¡ ´­¸®¸é f¹İº¹
+; Fí‚¤ë¥¼ ëˆ„ë¥´ë©´ ì¦‰ì‹œ 1íšŒ ì „ì†¡í•˜ê³ , fTimer(300ms) ê°„ê²© ë°˜ë³µì„ ì‹œì‘í•œë‹¤.
 F::
 	if( fToggle == false) {
-		send f  ; ´©¸£ÀÚ¸¶ÀÚ ÇÑ¹ø ³»º¸³»¾ß ÇÑ´Ù.
+		send f  ; ìµœì´ˆ ì…ë ¥ì€ ë°˜ë³µ íƒ€ì´ë¨¸ë¥¼ ê¸°ë‹¤ë¦¬ì§€ ì•ŠëŠ”ë‹¤.
 		StartFTimer()
 	}
 return
 
 ;----------------------------------------
-; FÅ°°¡ ¶¼ÀÌ¸é f¸¦ ¸ØÃßµÇ, fCallCnt°¡ ¿À·¡ ´­·ÈÀ¸¸é °è¼Ó ¹İº¹ÇÏµµ·Ï µĞ´Ù.
+; fCallCntëŠ” ìµœì´ˆ ì „ì†¡ ì´í›„ ë°˜ë³µ íƒ€ì´ë¨¸ê°€ ì‹¤í–‰ëœ íšŸìˆ˜ë‹¤.
+; Fë¥¼ ë—„ ë•Œ ë‘ ë²ˆ ë¯¸ë§Œ(ì•½ 600ms ë¯¸ë§Œ)ì´ë©´ ë°˜ë³µì„ ì·¨ì†Œí•œë‹¤.
+; ë‘ ë²ˆ ì´ìƒ ì‹¤í–‰ëë‹¤ë©´ í‚¤ë¥¼ ë–¼ì–´ë„ ë°˜ë³µì„ ìœ ì§€í•˜ë©°, ì •ì§€ í‚¤ë¡œ ì·¨ì†Œí•œë‹¤.
 F up::
 	if( fCallCnt < 2 ) {
 		CancelFTimer()
@@ -114,7 +146,7 @@ return
 
 
 ;----------------------------------------
-; ¿ø½Å ½ÇÇàÁßÀÌ ¾Æ´Ï¸é ¸ğµç ¹İº¹ Ãë¼Ò
+; ì›ì‹  ì‹¤í–‰ì¤‘ì´ ì•„ë‹ˆë©´ ëª¨ë“  ë°˜ë³µ ì·¨ì†Œ
 RecheckTimerEvent() {
 	return
 	
@@ -128,7 +160,7 @@ RecheckTimerEvent() {
 }
 
 ;----------------------------------------
-; ¸ğµç ¹İº¹ Ãë¼Ò
+; ëª¨ë“  ë°˜ë³µ ì·¨ì†Œ
 RemoveAllTimer()
 {
 	CancelFTimer()
@@ -137,7 +169,7 @@ RemoveAllTimer()
 }
 
 ;----------------------------------------
-; F ¹İº¹ ´©¸§
+; F ë°˜ë³µ ëˆ„ë¦„
 RepeatF:
 	RecheckTimerEvent()
 
@@ -148,7 +180,7 @@ RepeatF:
 return
 
 ;----------------------------------------
-; Q E ±³´ë·Î ¹İº¹ ´©¸§
+; Q E êµëŒ€ë¡œ ë°˜ë³µ ëˆ„ë¦„
 RepeatQE:
 	RecheckTimerEvent()
 
@@ -163,7 +195,7 @@ RepeatQE:
 return
 
 
-; Ä³¸¯ÅÍ ÀüÈ¯½Ã¿£ eq °¡ µ¿ÀÛÇØ¾ß ÇÑ´Ù.
+; ìºë¦­í„° ì „í™˜ì‹œì—” eq ê°€ ë™ì‘í•´ì•¼ í•œë‹¤.
 ;#If (fToggle)
 ;~*1::
 ;~*2::
@@ -173,7 +205,7 @@ return
 ;return
 
 ;----------------------------------------
-; Æ¯Á¤ Å°°¡ ´­¸®¸é ¹İº¹ ÇØÁ¦
+; íŠ¹ì • í‚¤ê°€ ëˆŒë¦¬ë©´ ë°˜ë³µ í•´ì œ
 #If (fToggle || qeToggle)
 ~*a::
 ~*s::
@@ -190,24 +222,28 @@ return
 ~*Shift::
 ~*Ctrl::
 ~*Alt::
+~*esc::
 ~*m::
 ~*1::
 ~*2::
 ~*3::
 ~*4::
 ~*l::
+~*c::
 RemoveAllTimer()
 return
 
 ;-----------------------------------
-; Á¶°Ç ¾øÀÌ ¾Æ·¡ºÎºĞ ½ÇÇà
+; ì¡°ê±´ ì—†ì´ ì•„ë˜ë¶€ë¶„ ì‹¤í–‰
 #If
 
-;----------------------------------- ¸¶¿ì½º¿ë
+;----------------------------------- ë§ˆìš°ìŠ¤ìš©
 
 ;----------------------------------------
-; X1Å°°¡ ´­¸®¸é LButton°ú QE¹İº¹
+; X1í‚¤ê°€ ëˆŒë¦¬ë©´ LButtonê³¼ QEë°˜ë³µ
 ~XButton1::
+	x1Held := true
+	SetTimer, WatchMouseButtons, %mouseWatchInterval%
 	Click
 	
 	StartM1Timer()
@@ -215,28 +251,29 @@ return
 return
 
 ;----------------------------------------
-; X1Å°°¡ ÇÃ¸®¸é ÇØÁ¦
+; X1í‚¤ê°€ í”Œë¦¬ë©´ í•´ì œ
 ~XButton1 Up::
-	CancelM1Timer()
-	CancelQETimer()
+	ReleaseXButton1()
 return
 
 ;----------------------------------------
-; X2Å°°¡ ´­¸®¸é LButton ¹İº¹
+; X2í‚¤ê°€ ëˆŒë¦¬ë©´ LButton ë°˜ë³µ
 ~XButton2::
+	x2Held := true
+	SetTimer, WatchMouseButtons, %mouseWatchInterval%
 	Click
 	
 	StartM1Timer()
 return
 
 ;----------------------------------------
-; X2Å°°¡ ÇÃ¸®¸é ÇØÁ¦
+; X2í‚¤ê°€ í”Œë¦¬ë©´ í•´ì œ
 ~XButton2 Up::
-	CancelM1Timer()
+	ReleaseXButton2()
 return
 
 ;----------------------------------------
-; ¸¶¿ì½º¿ŞÂÊ ±³´ë·Î ¹İº¹ ´©¸§
+; ë§ˆìš°ìŠ¤ì™¼ìª½ êµëŒ€ë¡œ ë°˜ë³µ ëˆ„ë¦„
 RepeatM1:
 	RecheckTimerEvent()
 
