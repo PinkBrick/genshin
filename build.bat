@@ -1,0 +1,1 @@
+"AutoHotkey_Build\Compiler\Ahk2Exe.exe" /in "genshin.ahk" /out "genshin.exe" /icon "temp_260416_222240_2.ico"
